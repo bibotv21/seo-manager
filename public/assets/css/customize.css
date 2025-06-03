@@ -1,0 +1,53 @@
+html{
+  font-size: 1em;
+}
+.middle-box h1 {
+    font-size: 130px;
+  }
+
+.cls-select2-wrapper .select2-container--default{
+  width: 50% !important;
+}
+
+table.dataTable tbody tr.expire-soon{
+  background-color: #b11d1d;
+  color: #fff;
+}
+
+.expire-soon .website-name{
+  color: #a6d6ff;
+}
+
+#all-gp-dashboard th:nth-child(4){
+  max-width: 400px;
+}
+
+.import-data-wrapper{
+  padding: 10px;
+}
+
+.preview-data-wrapper h3{
+  margin: 0;
+}
+
+.preview-data-action{
+  display: flex;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.import-action-btn{
+  position: absolute;
+  right: 0;
+}
+
+.ibox .custom-ibox{
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.ibox .custom-ibox .ibox-title{
+  border: none;
+}
