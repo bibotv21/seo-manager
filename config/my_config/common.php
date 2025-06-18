@@ -5,7 +5,7 @@ return [
     'text-link-type' => 'text_link',
     'guest-post-type' => 'guest_post',
     'invalid_csv_file_message' => 'Vui lòng kiểm tra lại file text link csv!',
-    'invalid_data_message' => 'Những domain hoặc CTV màu đỏ hiện tại chưa có trong dữ liệu. Thêm những Domain hoặc CTV trước khi thêm bằng CSV!',
+    'invalid_data_message' => 'Những domain hoặc CTV màu đỏ hiện tại chưa có trong dữ liệu. Thêm những Domain hoặc CTV trước khi thêm bằng CSV!!',
     'text_link_status' => [
         [
             'id' => 0,
