@@ -125,17 +125,21 @@ class TextLink extends Model
                         $xpath  = new \DOMXPath($dom);
 
                         foreach ($tl_group as $tl_val) {
-                            $condition = "contains(translate(@href,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'), 'https://" . $tl_val->website->name . "')";
-                            $match = $xpath->query('//a[' . $condition . ']')->item(0);
-                            if (empty($match)) {
-                                $anchor_text = '';
-                                $rel = '';
-                                $status = false;
-                            } else {
-                                $anchor_text = $match->nodeValue;
-                                $rel = $match->getAttribute('rel');
-                                $status = true;
-                            }
+                            $web_names = RedirectAction::get_all_301($tl_val->website->id);
+                            $status = false;
+                            $anchor_text = '';
+                            $rel = '';
+                            foreach($web_names as $wb_name){
+                                $condition = "contains(translate(@href,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'), 'https://" . $wb_name . "')";
+                                $match = $xpath->query('//a[' . $condition . ']')->item(0);
+                                if (empty($match)){
+                                    continue;
+                                }else{
+                                    $anchor_text = $match->nodeValue . " (" . $wb_name . ")";
+                                    $rel = $match->getAttribute('rel');
+                                    $status = true;
+                                }
+                            }                        
 
                             $tl_val->update([
                                 'status' => $status,
@@ -162,7 +166,7 @@ class TextLink extends Model
 
 
         $pool = new Pool($client, $promises, [
-            'concurrency' => 20,
+            'concurrency' => 17,
             'rejected' => function ($reason, $i) {
                 Log::error('rejected check text link: %s', ['exception' => $reason]);
             }

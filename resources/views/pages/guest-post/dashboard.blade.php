@@ -67,6 +67,7 @@
             data: @json($gp_data),
             order: [1,'desc'],
             columns: columns,
+            pageLength: 50,
             columnDefs: [
                 {
                     target: 2,

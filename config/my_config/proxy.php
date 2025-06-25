@@ -1,4 +1,4 @@
 <?php
 return [
-    'max_requests' => 140
+    'max_requests' => 180
 ];

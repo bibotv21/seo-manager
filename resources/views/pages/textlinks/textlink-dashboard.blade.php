@@ -140,6 +140,7 @@
             data: @json($tl_data),
             order: [2,'asc'],
             columns: columns,
+            pageLength: 50,
             columnDefs: [
                 {
                     target: 4,

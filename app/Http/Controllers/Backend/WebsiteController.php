@@ -14,14 +14,15 @@ class WebsiteController extends Controller
 {
     //
 
-    protected $website, $gp, $my_wb_sv, $attr;
+    protected $website, $gp, $my_wb_sv, $attr, $ra_301;
 
-    public function __construct(Website $website, GuestPost $gp, MyWebsiteService $my_wb_sv)
+    public function __construct(Website $website, GuestPost $gp, MyWebsiteService $my_wb_sv, RedirectAction $redirect_301)
     {
         $this->website = $website;
         $this->gp = $gp;
         $this->my_wb_sv = $my_wb_sv;
         $this->attr = $this->gp->removeGPAttrs([6]);
+        $this->$redirect_301 = $this->ra_301;
     }
 
 
@@ -36,41 +37,41 @@ class WebsiteController extends Controller
             $arr_wb_id = [];
             $ra = RedirectAction::where('to_domain_id', $item->id)->first();
             $ra_message = '';
-            if (!$ra) {
-                $from_ra = RedirectAction::where('from_domain_id', $item->id)->first();
-                if (!$from_ra) {
-                    $ra_message = 'n/a';
-                } else {
-                    $from_wb = $this->website->find($from_ra->from_domain_id);
-                    $to_wb = $this->website->find($from_ra->to_domain_id);
-                    $ra_message = $from_wb->name . ' --> ' . $to_wb->name;
-                }
-            } else {
-                $arr_wb_id[] = [
-                    'id' => $ra->from_domain_id,
-                    'date' => $ra->impl_date
-                ];
-                $a = $ra;
-                do {
-                    $t = RedirectAction::where('to_domain_id', $a->from_domain_id)->first();
-                    if ($t) {
-                        $arr_wb_id[] = [
-                            'id' => $t->from_domain_id,
-                            'date' => $t->impl_date
-                        ];
-                        $a = $t;
-                    }
-                } while ($t);
+            // if (!$ra) {
+            //     $from_ra = RedirectAction::where('from_domain_id', $item->id)->first();
+            //     if (!$from_ra) {
+            //         $ra_message = 'n/a';
+            //     } else {
+            //         $from_wb = $this->website->find($from_ra->from_domain_id);
+            //         $to_wb = $this->website->find($from_ra->to_domain_id);
+            //         $ra_message = $from_wb->name . ' --> ' . $to_wb->name;
+            //     }
+            // } else {
+            //     $arr_wb_id[] = [
+            //         'id' => $ra->from_domain_id,
+            //         'date' => $ra->impl_date
+            //     ];
+            //     $a = $ra;
+            //     do {
+            //         $t = RedirectAction::where('to_domain_id', $a->from_domain_id)->first();
+            //         if ($t) {
+            //             $arr_wb_id[] = [
+            //                 'id' => $t->from_domain_id,
+            //                 'date' => $t->impl_date
+            //             ];
+            //             $a = $t;
+            //         }
+            //     } while ($t);
 
-                $sorted = array_values(Arr::sort($arr_wb_id, function (array $val) {
-                    return $val['date'];
-                }));
+            //     $sorted = array_values(Arr::sort($arr_wb_id, function (array $val) {
+            //         return $val['date'];
+            //     }));
 
-                foreach ($sorted as $wb) {
-                    $ra_message .= $this->website->find($wb['id'])->name . ' --> ';
-                }
-                $ra_message .= $item->name;
-            }            
+            //     foreach ($sorted as $wb) {
+            //         $ra_message .= $this->website->find($wb['id'])->name . ' --> ';
+            //     }
+            //     $ra_message .= $item->name;
+            // }            
 
             $tmp_w = $item->mappingWebsiteData($this->website->websiteAttrs());
             $websites_data[] = array_merge($tmp_w, ['r301_message' => $ra_message]);

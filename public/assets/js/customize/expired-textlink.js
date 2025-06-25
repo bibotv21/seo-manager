@@ -3,35 +3,12 @@
     var expiredTL = {};
     var document = $(document);
     var expired_dataTable;
-    var chilCheckbox;
+    var chilCheckbox = '#expired-text-links-table tbody input[type="checkbox"]';
 
     function clearInstance(selector, eventType, handler){
         const element = $(selector);
         element.off(eventType);
         element.on(eventType, handler);
-    }
-
-    expiredTL.initCheckbox = () => {        
-        chilCheckbox = $('#expired-text-links-table tbody input[type="checkbox"]');
-        clearInstance('#select-all-id', 'click', function () {
-            const isSelected = this.checked;
-            chilCheckbox.prop('checked', isSelected).trigger('change');
-            if(expired_dataTable.rows().data().toArray().length == 0){
-                $('#select-all-id').prop('checked', false);
-            }
-        });
-
-        clearInstance(chilCheckbox, 'change', function () {
-            const isAllChecked = chilCheckbox.length == chilCheckbox.filter(':checked').length;
-            $('#select-all-id').prop('checked', isAllChecked);
-            const isSelected = this.checked;
-            const row = $(this).closest('tr');
-            row.toggleClass('selected', isSelected);
-        });
-
-        if(expired_dataTable.rows().data().toArray().length == 0){
-            $('#select-all-id').prop('checked', false);
-        }
     }
 
     expiredTL.ajaxAction = (url, more_data) => {
@@ -51,7 +28,7 @@
                     ajax_data[el['key']] = el['data']
                 });
             }
-            
+            debugger
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -146,8 +123,44 @@
                         return two_actions(data)
                     }
                 }
-            ]
+            ],
+            drawCallback: function(){                
+                $('#select-all-id').prop('checked', false);
+                $(chilCheckbox).prop('checked', false).trigger('change');
+                expiredTL.initCheckbox();
+                if(typeof expired_dataTable !== "undefined"){                    
+                    expired_dataTable.rows('.selected').remove();
+                }            
+            }
         });
+    }
+
+    expiredTL.initCheckbox = () => {
+        clearInstance('#select-all-id', 'click', function () {
+            const isSelected = this.checked;
+            $(chilCheckbox).prop('checked', isSelected).trigger('change');
+            if(expired_dataTable !== "undefined"){
+                if(typeof expired_dataTable.rows().data().toArray().length == 0){
+                    $('#select-all-id').prop('checked', false);
+                }
+            }
+
+        });
+
+        clearInstance(chilCheckbox, 'change', function () {            
+            const isAllChecked = $(chilCheckbox).length == $(chilCheckbox).filter(':checked').length;
+            $('#select-all-id').prop('checked', isAllChecked);
+            const isSelected = this.checked;
+            const row = $(this).closest('tr');
+            row.toggleClass('selected', isSelected);
+        });
+
+        if(typeof expired_dataTable !== "undefined"){
+            if(expired_dataTable.rows().data().toArray().length == 0){
+                $('#select-all-id').prop('checked', false);
+            }
+        }
+
     }
 
     document.ready(function () {

@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\TextLinkController;
 use App\Http\Controllers\Ajax\AjaxTLController;
 use App\Http\Controllers\Backend\WebsiteController;
+use App\Http\Controllers\Backend\RedirectController;
 use App\Http\Controllers\Backend\GuestPostController;
 use App\Http\Controllers\Ajax\AjaxGPController;
 use App\Http\Controllers\Backend\CTVController;
@@ -84,6 +85,12 @@ Route::middleware('my_auth')->group(function () {
             Route::get('{id}/delete', [WebsiteController::class, 'delete_website_action'])->name('website.delete');
             Route::get('{id}/back-links', [WebsiteController::class, 'website_back_links'])->name('website.bl.index');
         });
+
+        Route::prefix('redirect')->group(function (){
+            Route::get('index', [RedirectController::class, 'index'])->name('redirect.index');
+            Route::get('add', [RedirectController::class, 'create_layout'])->name('redirect.add.layout');
+            Route::post('store', [RedirectController::class, 'store'])->name('redirect.store');
+        });
     });
 
     Route::prefix('ctv')->group(function () {
@@ -101,6 +108,7 @@ Route::middleware('my_auth')->group(function () {
     Route::prefix('ajax')->group(function () {
         Route::prefix('text-link')->group( function(){
             Route::post('check-ctv', [AjaxCTVController::class, 'check_text_link'])->name('ajax.ctv-tl.check');
+            Route::post('website-check-tl', [AjaxTLController::class, 'website_check_tl'])->name('ajax.wb.check_tl');
             Route::get('check-all', [AjaxTLController::class, 'check_all_text_links'])->name('ajax.tl-all.check');
             Route::get('export-all', [AjaxTLController::class, 'export_excel_file'])->name('ajax.tl-all.export');
             Route::get('{id}/ctv-export', [AjaxTLController::class, 'export_excel_file'])->name('ajax.ctv-tl.export');

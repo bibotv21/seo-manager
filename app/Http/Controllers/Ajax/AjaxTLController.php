@@ -57,4 +57,10 @@ class AjaxTLController extends Controller
     {
         return $this->helper->exportExcel(config('my_config.common.text-link-type'), $id);
     }
+
+    public function website_check_tl(Request $request)
+    {
+        $td_group = $this->tl->where('domain_id', $request->input('id'))->get()->groupBy('target_domain');
+        return $this->tl->check_textlinks($td_group);
+    }
 }
