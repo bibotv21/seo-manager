@@ -26,4 +26,14 @@ return [
             'title' => 'Indexed'
         ]
     ],
+    'redirect_status' => [
+        [
+            'id' => 0,
+            'title' => 'Không check'
+        ],
+        [
+            'id' => 1,
+            'title' => 'Check'
+        ]
+    ]
 ];

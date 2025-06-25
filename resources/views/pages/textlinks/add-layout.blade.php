@@ -90,13 +90,13 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group cls-select2-wrapper"><label class="col-sm-2 control-label">CTV</label>
+                    <div class="form-group cls-select2-wrapper"><label class="col-sm-2 control-label">Website</label>
                         <div class="col-sm-3">
                             <select class="cls-tl-select2" name="domain_id">
                                 <option value="">Chọn Website</option>
                                 @foreach ($default_data['website'] as $item)
                                     <option
-                                        {{ old('ctv_id', $tl_data->domain_id ?? '') == $item['id'] ? 'selected' : '' }}
+                                        {{ old('domain_id', $tl_data->domain_id ?? '') == $item['id'] ? 'selected' : '' }}
                                         value="{{ $item['id'] }}">{{ $item['name'] }}</option>
                                 @endforeach
                             </select>

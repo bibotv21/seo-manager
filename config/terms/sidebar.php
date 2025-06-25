@@ -23,10 +23,19 @@ return [
         ]
     ],
     'website' => [
-        'title' => 'Mange Website',
-        'route' => '/website/index',
+        'title' =>'Manage Website',
+        'route' => "#",
         'icon' => 'fa fa-star',
-        'sub_menu' => []
+        'sub_menu' => [
+            'websites' => [
+                'title' => 'Websites',
+                'route' => '/website/index'
+            ],
+            'redirect' => [
+                'title' => 'Redirect',
+                'route' => '/website/redirect/index'
+            ]
+        ]
     ],
     'ctv' => [
         'title' => 'CTV',

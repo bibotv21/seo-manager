@@ -1,3 +1,4 @@
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
         <h2>{{$website->name}}</h2>
@@ -14,6 +15,10 @@
     <div class="backlinks-website-swiper">
         <div class="swiper-wrapper">
             <div class="swiper-slide">
+                <div class="button-main-wrapper">
+                    <button class="btn btn-success " id="website-check-tl"><i class="fa fa-eye"></i><span class="bold">
+                            Check Text Links</span></button>
+                </div>
                 <div class="main-content-wrapper">
                     <table id="website-text-links" class="display" style="width:100%">
                         <thead>
@@ -49,11 +54,12 @@
             </div>
         </div>
     </div>
+    <input name="website-id" type="text" value="{{ $website->id }}" hidden>
 </div>
 
 
 <script>
-    $('#website-text-links').DataTable({
+    var website_tl_datatable = $('#website-text-links').DataTable({
         data: @json($tl_data),
         columns: [
             { data: 'target_domain' },
@@ -151,5 +157,43 @@
             }
         },
         simulateTouch: false
+    });
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $('#website-check-tl').on('click', function() {
+        Swal.fire({
+            title: 'Loading...',
+            allowOutsideClick: false,
+            showConfirmButton: false
+        });
+        $.ajax({
+            url: "{{ route('ajax.wb.check_tl') }}",
+            type: 'post',
+            data: {
+                id: $('input[name="website-id"]').val()
+            },
+            dataType: 'json',
+            success: function(data) {
+                website_tl_datatable.clear().rows.add(data).draw();
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Data loaded successfully',
+                    icon: 'success'
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Something went wrong',
+                    icon: 'error'
+                });
+                console.log('Erorr: ' + textStatus + " " + errorThrown);
+            }
+        });
     });
 </script>
